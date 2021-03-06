@@ -13,7 +13,8 @@ typedef enum {
     USER_PRESS,
     LAMP_ON,
     ELEVATOR_ARRIVED,
-    LAMP_OFF
+    LAMP_OFF,
+    DO_NOT_PUBLISH
 } Signal;
 
 typedef struct {

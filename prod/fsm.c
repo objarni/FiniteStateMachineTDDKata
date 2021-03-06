@@ -34,10 +34,21 @@ Signal buttonSignalHandler(
         Signal signal) {
     switch(fsm->state) {
         case waitForPress:
-            return LAMP_ON;
-            break;
+            if(signal == USER_PRESS) {
+            fsm->state = waitForElevator;
+                return LAMP_ON;
+            }
+            else {
+                return DO_NOT_PUBLISH;
+            }
         case waitForElevator:
-            break;
+            if(signal == ELEVATOR_ARRIVED) {
+                fsm->state = waitForPress;
+                return LAMP_OFF;
+            }
+            else {
+                return DO_NOT_PUBLISH;
+            }
     }
     fsm->state = waitForElevator;
 }
