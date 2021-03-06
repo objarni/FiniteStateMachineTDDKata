@@ -5,6 +5,27 @@
 #ifndef FSM_PRACTICE_H
 #define FSM_PRACTICE_H
 
-int fn(int i);
+typedef enum {
+    waitForPress, waitForElevator
+} State;
+
+typedef enum {
+    USER_PRESS,
+    LAMP_ON,
+    ELEVATOR_ARRIVED,
+    LAMP_OFF
+} Signal;
+
+typedef struct {
+    State state;
+} ButtonFsm;
+
+void initButtonFSM(ButtonFsm* fsm);
+
+Signal buttonSignalHandler(
+    ButtonFsm *fsm,
+    Signal signal
+);
+
 
 #endif //FSM_PRACTICE_H
