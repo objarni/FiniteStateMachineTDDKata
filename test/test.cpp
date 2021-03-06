@@ -3,7 +3,7 @@
 #include <catch2/catch.hpp>
 
 extern "C" {
-    #include "fsm.h"
+    #include "../prod/fsm.h"
 }
 
 TEST_CASE( "Factorials are computed", "[factorial]" ) {
