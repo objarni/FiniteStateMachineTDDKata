@@ -2,9 +2,9 @@
 // Created by ubuntu on 2021-03-03.
 //
 
-#ifndef BUTTON_FSM_PRACTICE_FSM_H
-#define BUTTON_FSM_PRACTICE_FSM_H
+#ifndef FSM_PRACTICE_H
+#define FSM_PRACTICE_H
 
-unsigned int Factorial( unsigned int number );
+int fn(int i);
 
-#endif //BUTTON_FSM_PRACTICE_FSM_H
+#endif //FSM_PRACTICE_H

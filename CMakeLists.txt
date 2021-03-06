@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(button_fsm_practice)
+project(fsm_practice)
 set(CMAKE_CXX_STANDARD 14)
 
 # FetchContent needs CMake 3.14 or above

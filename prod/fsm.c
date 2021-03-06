@@ -4,7 +4,6 @@
 
 #include "fsm.h"
 
-unsigned int Factorial(unsigned int number) {
-    int i = 5;
-    return number <= 1 ? number : Factorial(number-1)*number;
+int fn(int i) {
+    return 1;
 }
