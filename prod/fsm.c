@@ -29,26 +29,29 @@ void initButtonFSM(ButtonFsm *fsm) {
     fsm->state = waitForPress;
 }
 
-Signal buttonSignalHandler(
-        ButtonFsm *fsm,
-        Signal signal) {
-    switch(fsm->state) {
-        case waitForPress:
-            if(signal == USER_PRESS) {
-            fsm->state = waitForElevator;
-                return LAMP_ON;
-            }
-            else {
-                return DO_NOT_PUBLISH;
-            }
-        case waitForElevator:
-            if(signal == ELEVATOR_ARRIVED) {
-                fsm->state = waitForPress;
-                return LAMP_OFF;
-            }
-            else {
-                return DO_NOT_PUBLISH;
-            }
+Signal doWaitForPress(ButtonFsm *fsm, Signal signal) {
+    if (signal == USER_PRESS) {
+        fsm->state = waitForElevator;
+        return LAMP_ON;
+    } else {
+        return DO_NOT_PUBLISH;
     }
-    fsm->state = waitForElevator;
+}
+
+Signal doWaitForElevator(ButtonFsm *fsm, Signal signal) {
+    if (signal == ELEVATOR_ARRIVED) {
+        fsm->state = waitForPress;
+        return LAMP_OFF;
+    } else {
+        return DO_NOT_PUBLISH;
+    }
+}
+
+Signal buttonSignalHandler(ButtonFsm *fsm, Signal signal) {
+    switch (fsm->state) {
+        case waitForPress:
+            return doWaitForPress(fsm, signal);
+        case waitForElevator:
+            return doWaitForElevator(fsm, signal);
+    }
 }

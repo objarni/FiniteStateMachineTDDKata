@@ -15,11 +15,10 @@
  */
 
 extern "C" {
-    #include "../prod/fsm.h"
+#include "../prod/fsm.h"
 }
 
-
-TEST_CASE( "ButtonFsmBehaviour")
+TEST_CASE("ButtonFsmBehaviour")
 {
     ButtonFsm fsm;
     initButtonFSM(&fsm);
@@ -30,8 +29,7 @@ TEST_CASE( "ButtonFsmBehaviour")
             Signal publishSignal = buttonSignalHandler(&fsm, Signal::USER_PRESS);
             REQUIRE(fsm.state == State::waitForElevator);
             REQUIRE(publishSignal == Signal::LAMP_ON);
-        }
-        SECTION("and an elevator arrives") {
+        }SECTION("and an elevator arrives") {
             Signal publishSignal = buttonSignalHandler(&fsm, Signal::ELEVATOR_ARRIVED);
             REQUIRE(fsm.state == State::waitForPress);
             REQUIRE(publishSignal == Signal::DO_NOT_PUBLISH);
@@ -45,11 +43,10 @@ TEST_CASE( "ButtonFsmBehaviour")
             Signal publishSignal = buttonSignalHandler(&fsm, Signal::ELEVATOR_ARRIVED);
             REQUIRE(fsm.state == State::waitForPress);
             REQUIRE(publishSignal == Signal::LAMP_OFF);
-        }
-        SECTION("then pressing has no effect") {
+        }SECTION("then pressing has no effect") {
             Signal publishSignal = buttonSignalHandler(&fsm, Signal::USER_PRESS);
-            REQUIRE( fsm.state == State::waitForElevator );
-            REQUIRE( publishSignal == Signal::DO_NOT_PUBLISH );
+            REQUIRE(fsm.state == State::waitForElevator);
+            REQUIRE(publishSignal == Signal::DO_NOT_PUBLISH);
         }
     }
 }
