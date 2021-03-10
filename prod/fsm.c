@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "../prod/fsm.h"
 #include "fsm.h"
 
@@ -29,29 +30,40 @@ void initButtonFSM(ButtonFsm *fsm) {
     fsm->state = waitForPress;
 }
 
-Signal doWaitForPress(ButtonFsm *fsm, Signal signal) {
+Signal waitForPressHandler(ButtonFsm *fsm, Signal signal) {
     if (signal == USER_PRESS) {
-        fsm->state = waitForElevator;
         return LAMP_ON;
-    } else {
-        return DO_NOT_PUBLISH;
     }
 }
 
-Signal doWaitForElevator(ButtonFsm *fsm, Signal signal) {
+Signal waitForElevetorHandler(ButtonFsm *fsm, Signal signal) {
     if (signal == ELEVATOR_ARRIVED) {
-        fsm->state = waitForPress;
         return LAMP_OFF;
-    } else {
-        return DO_NOT_PUBLISH;
     }
 }
+
+typedef Signal (*Handler)(ButtonFsm *, Signal signal);
+
+typedef struct {
+    State inState;
+    Signal signal;
+    State toState;
+    Handler handler;
+} Transition;
+
+Transition transitionTable[] = {
+        {waitForPress,    USER_PRESS,       waitForElevator, waitForPressHandler},
+        {waitForElevator, ELEVATOR_ARRIVED, waitForPress,    waitForElevetorHandler},
+};
 
 Signal buttonSignalHandler(ButtonFsm *fsm, Signal signal) {
-    switch (fsm->state) {
-        case waitForPress:
-            return doWaitForPress(fsm, signal);
-        case waitForElevator:
-            return doWaitForElevator(fsm, signal);
+    for (int i = 0; i < sizeof(transitionTable) / sizeof(Transition); i++) {
+        Transition check = transitionTable[i];
+        if (check.inState == fsm->state && check.signal == signal) {
+            Signal signalToPublish = check.handler(fsm, signal);
+            fsm->state = check.toState;
+            return signalToPublish;
+        }
     }
+    return DO_NOT_PUBLISH;
 }
