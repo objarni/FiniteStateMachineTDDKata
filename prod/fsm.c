@@ -31,15 +31,11 @@ void initButtonFSM(ButtonFsm *fsm) {
 }
 
 Signal waitForPressHandler(ButtonFsm *fsm, Signal signal) {
-    if (signal == USER_PRESS) {
-        return LAMP_ON;
-    }
+    return LAMP_ON;
 }
 
 Signal waitForElevetorHandler(ButtonFsm *fsm, Signal signal) {
-    if (signal == ELEVATOR_ARRIVED) {
-        return LAMP_OFF;
-    }
+    return LAMP_OFF;
 }
 
 typedef Signal (*Handler)(ButtonFsm *, Signal signal);
