@@ -23,10 +23,14 @@ typedef struct {
 
 void initButtonFSM(ButtonFsm* fsm);
 
-Signal buttonSignalHandler(
+void buttonSignalHandler(
     ButtonFsm *fsm,
     Signal signal
 );
 
+typedef void (*LampAPI)(int);
+LampAPI lampAPI;
+
+void setLampAPI(LampAPI);
 
 #endif //FSM_PRACTICE_H

@@ -31,11 +31,11 @@ void initButtonFSM(ButtonFsm *fsm) {
 }
 
 Signal waitForPressHandler(ButtonFsm *fsm, Signal signal) {
-    return LAMP_ON;
+    lampAPI(1);
 }
 
 Signal waitForElevetorHandler(ButtonFsm *fsm, Signal signal) {
-    return LAMP_OFF;
+    lampAPI(0);
 }
 
 typedef Signal (*Handler)(ButtonFsm *, Signal signal);
@@ -52,21 +52,31 @@ Transition transitionTable[] = {
         {waitForElevator, ELEVATOR_ARRIVED, waitForPress,    waitForElevetorHandler},
 };
 
-Signal buttonSignalHandler(ButtonFsm *fsm, Signal signal) {
+void buttonSignalHandler(ButtonFsm *fsm, Signal signal) {
     for (int i = 0; i < sizeof(transitionTable) / sizeof(Transition); i++) {
         Transition check = transitionTable[i];
         if (check.inState == fsm->state && check.onSignal == signal) {
-            Signal signalToPublish = check.handler(fsm, signal);
+            check.handler(fsm, signal);
             fsm->state = check.toState;
-            return signalToPublish;
+            return;
         }
     }
-    return DO_NOT_PUBLISH;
+    return;
+}
+
+void setLampAPI(LampAPI newLampAPI) {
+    lampAPI = newLampAPI;
 }
 
 // Wishlist
 // 'meatier' state handlers e.g reading values or calling APIs
-// Data to signals
+//  Idea: lamp could be API controlled instead of signal
+// Publishing signals via API not return (realism)
+// external state / separate type for FSM state
 // Third state
+//   Idea: introduce alarm end state
+
+// Out of scope
+// Data to signals
 // Publish multiple signals
 // Hierarchical state machine

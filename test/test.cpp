@@ -18,35 +18,38 @@ extern "C" {
 #include "../prod/fsm.h"
 }
 
+bool lampOn = false;
+
 TEST_CASE("ButtonFsmBehaviour")
 {
     ButtonFsm fsm;
     initButtonFSM(&fsm);
+    auto lampAPIFake = [](int setLampOn) { lampOn = setLampOn; };
+    setLampAPI(lampAPIFake);
 
     SECTION("when waiting for press") {
         REQUIRE(fsm.state == State::waitForPress);
         SECTION("and a press is seen") {
-            Signal publishSignal = buttonSignalHandler(&fsm, Signal::USER_PRESS);
+            buttonSignalHandler(&fsm, Signal::USER_PRESS);
             REQUIRE(fsm.state == State::waitForElevator);
-            REQUIRE(publishSignal == Signal::LAMP_ON);
-        }SECTION("and an elevator arrives") {
-            Signal publishSignal = buttonSignalHandler(&fsm, Signal::ELEVATOR_ARRIVED);
+            REQUIRE(lampOn);
+        }
+        SECTION("and an elevator arrives") {
+            buttonSignalHandler(&fsm, Signal::ELEVATOR_ARRIVED);
             REQUIRE(fsm.state == State::waitForPress);
-            REQUIRE(publishSignal == Signal::DO_NOT_PUBLISH);
         }
     }
 
     SECTION("when waiting for elevator") {
         fsm.state = State::waitForElevator;
         SECTION("and it arrives") {
-            Signal publishSignal = buttonSignalHandler(&fsm, Signal::ELEVATOR_ARRIVED);
+            buttonSignalHandler(&fsm, Signal::ELEVATOR_ARRIVED);
             REQUIRE(fsm.state == State::waitForPress);
-            REQUIRE(publishSignal == Signal::LAMP_OFF);
+            REQUIRE(!lampOn);
         }
         SECTION("then pressing has no effect") {
-            Signal publishSignal = buttonSignalHandler(&fsm, Signal::USER_PRESS);
+            buttonSignalHandler(&fsm, Signal::USER_PRESS);
             REQUIRE(fsm.state == State::waitForElevator);
-            REQUIRE(publishSignal == Signal::DO_NOT_PUBLISH);
         }
     }
 }
