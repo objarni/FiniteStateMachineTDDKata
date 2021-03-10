@@ -68,12 +68,12 @@ void setLampAPI(LampAPI newLampAPI) {
     lampAPI = newLampAPI;
 }
 
-// Wishlist
-// 'meatier' state handlers e.g reading values or calling APIs
-//  Idea: lamp could be API controlled instead of signal
-// Publishing signals via API not return (realism)
-// external state / separate type for FSM state
-// Third state
+// Potential improvements
+// #'meatier' state handlers e.g reading values or calling APIs
+// # Idea: lamp could be API controlled instead of signal
+// Higher realism: Publishing/testing signals
+// Higher realism: external state / separate type for FSM state
+// Higher realism/bigger FSM: Third state
 //   Idea: introduce alarm end state
 
 // Out of scope
