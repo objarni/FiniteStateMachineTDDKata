@@ -39,11 +39,11 @@ TEST_CASE("ButtonFsmBehaviour")
     SECTION("when waiting for elevator") {
         fsm.state = State::waitForElevator;
         SECTION("and it arrives") {
-            fsm.state = State::waitForElevator;
             Signal publishSignal = buttonSignalHandler(&fsm, Signal::ELEVATOR_ARRIVED);
             REQUIRE(fsm.state == State::waitForPress);
             REQUIRE(publishSignal == Signal::LAMP_OFF);
-        }SECTION("then pressing has no effect") {
+        }
+        SECTION("then pressing has no effect") {
             Signal publishSignal = buttonSignalHandler(&fsm, Signal::USER_PRESS);
             REQUIRE(fsm.state == State::waitForElevator);
             REQUIRE(publishSignal == Signal::DO_NOT_PUBLISH);
