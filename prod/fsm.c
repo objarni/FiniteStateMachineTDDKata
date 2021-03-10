@@ -30,15 +30,15 @@ void initButtonFSM(ButtonFsm *fsm) {
     fsm->state = waitForPress;
 }
 
-Signal waitForPressHandler(ButtonFsm *fsm, Signal signal) {
+void waitForPressHandler(ButtonFsm *fsm, Signal signal) {
     lampAPI(1);
 }
 
-Signal waitForElevetorHandler(ButtonFsm *fsm, Signal signal) {
+void waitForElevetorHandler(ButtonFsm *fsm, Signal signal) {
     lampAPI(0);
 }
 
-typedef Signal (*Handler)(ButtonFsm *, Signal signal);
+typedef void (*Handler)(ButtonFsm *, Signal signal);
 
 typedef struct {
     State inState;
