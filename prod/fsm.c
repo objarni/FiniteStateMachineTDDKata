@@ -46,7 +46,7 @@ typedef Signal (*Handler)(ButtonFsm *, Signal signal);
 
 typedef struct {
     State inState;
-    Signal signal;
+    Signal onSignal;
     State toState;
     Handler handler;
 } Transition;
@@ -59,7 +59,7 @@ Transition transitionTable[] = {
 Signal buttonSignalHandler(ButtonFsm *fsm, Signal signal) {
     for (int i = 0; i < sizeof(transitionTable) / sizeof(Transition); i++) {
         Transition check = transitionTable[i];
-        if (check.inState == fsm->state && check.signal == signal) {
+        if (check.inState == fsm->state && check.onSignal == signal) {
             Signal signalToPublish = check.handler(fsm, signal);
             fsm->state = check.toState;
             return signalToPublish;
