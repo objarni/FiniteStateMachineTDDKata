@@ -67,3 +67,10 @@ Signal buttonSignalHandler(ButtonFsm *fsm, Signal signal) {
     }
     return DO_NOT_PUBLISH;
 }
+
+// Wishlist
+// 'meatier' state handlers e.g reading values or calling APIs
+// Data to signals
+// Third state
+// Publish multiple signals
+// Hierarchical state machine
