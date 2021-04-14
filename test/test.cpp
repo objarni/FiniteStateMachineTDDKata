@@ -5,7 +5,7 @@
 /*
  * Test list
  * [x] starts in waitForPress state
- * [x] when in waitForPress state, a USER_PRESS signal
+ * [ ] when in waitForPress state, a USER_PRESS signal
  *     gets us to waitForElevator state
  * [ ] when in waitForElevator state, a DOORS_OPENING
  *     signal transitions to waitingForPress state
@@ -19,28 +19,19 @@ extern "C" {
 
 TEST_CASE("ButtonFsmBehaviour")
 {
+    // A: These statements are run before any SECTION
     ButtonFsm fsm;
     initButtonFSM(&fsm);
 
-    SECTION("when waiting for press") {
+    SECTION("1") {
         REQUIRE(fsm.state == State::waitForPress);
-        SECTION("and a press is seen") {
-            buttonSignalHandler(&fsm, Signal::USER_PRESS);
-            REQUIRE(fsm.state == State::waitForElevator);
-        }
-        SECTION("and an elevator arrives") {
-            buttonSignalHandler(&fsm, Signal::ELEVATOR_ARRIVED);
-            REQUIRE(fsm.state == State::waitForPress);
-        }
     }
 
-    SECTION("when waiting for elevator") {
-        fsm.state = State::waitForElevator;
-        SECTION("and it arrives") {
-            buttonSignalHandler(&fsm, Signal::ELEVATOR_ARRIVED);
-            REQUIRE(fsm.state == State::waitForPress);
-        }
-        SECTION("then pressing has no effect") {
+    SECTION("2") {
+        fsm.state == State::waitForPress; // B: This statement is run after A
+
+        SECTION("2.1") {
+            // C: This statement is run after A and B
             buttonSignalHandler(&fsm, Signal::USER_PRESS);
             REQUIRE(fsm.state == State::waitForElevator);
         }

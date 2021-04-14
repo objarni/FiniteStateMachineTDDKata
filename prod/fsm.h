@@ -6,7 +6,6 @@ typedef enum {
 
 typedef enum {
     USER_PRESS,
-    ELEVATOR_ARRIVED,
 } Signal;
 
 typedef struct {
