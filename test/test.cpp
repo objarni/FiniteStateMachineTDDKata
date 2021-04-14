@@ -2,39 +2,33 @@
 
 #include <catch2/catch.hpp>
 
-/*
- * Test list
- * [x] starts in waitForPress state
- * [ ] when in waitForPress state, a USER_PRESS signal
- *     gets us to waitForElevator state
- * [ ] when in waitForElevator state, a DOORS_OPENING
- *     signal transitions to waitingForPress state
- * [ ] other combinations result in no state change
- *     e.g waitForElevator getting USER_PRESS
- */
-
 extern "C" {
 #include "../prod/fsm.h"
 }
 
-TEST_CASE("ButtonFsmBehaviour")
+TEST_CASE("1")
 {
-    // A: These statements are run before any SECTION
     ButtonFsm fsm;
     initButtonFSM(&fsm);
-
-    SECTION("1") {
-        REQUIRE(fsm.state == State::waitForPress);
-    }
-
-    SECTION("2") {
-        fsm.state = State::waitForPress; // B: This statement is run after A
-
-        SECTION("2.1") {
-            // C: This statement is run after A and B
-            buttonSignalHandler(&fsm, Signal::USER_PRESS);
-            REQUIRE(fsm.state == State::waitForElevator);
-        }
-    }
+    REQUIRE(fsm.state == State::waitForPress);
 }
+
+TEST_CASE("2") {
+    ButtonFsm fsm;
+    initButtonFSM(&fsm);
+    buttonSignalHandler(&fsm, Signal::USER_PRESS);
+    REQUIRE(fsm.state == State::waitForElevator);
+}
+
+/*
+ * Test list / scratch notes
+ * [x] starts in waitForPress state
+ * [x] when in waitForPress state, a USER_PRESS signal
+ *     gets us to waitForElevator state
+ * [ ] when in waitForElevator state, a DOORS_OPENING
+ *     signal transitions to waitingForPress state
+ * Other combinations should result in no state change
+ * [ ] waitForElevator getting USER_PRESS or
+ * [ ] waitForPress getting DOORS_OPENING
+ */
 
