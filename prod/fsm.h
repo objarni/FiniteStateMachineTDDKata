@@ -1,9 +1,4 @@
-//
-// Created by ubuntu on 2021-03-03.
-//
-
-#ifndef FSM_PRACTICE_H
-#define FSM_PRACTICE_H
+#pragma once
 
 typedef enum {
     waitForPress, waitForElevator
@@ -11,10 +6,7 @@ typedef enum {
 
 typedef enum {
     USER_PRESS,
-    LAMP_ON,
     ELEVATOR_ARRIVED,
-    LAMP_OFF,
-    DO_NOT_PUBLISH
 } Signal;
 
 typedef struct {
@@ -27,10 +19,3 @@ void buttonSignalHandler(
     ButtonFsm *fsm,
     Signal signal
 );
-
-typedef void (*LampAPI)(int);
-LampAPI lampAPI;
-
-void setLampAPI(LampAPI);
-
-#endif //FSM_PRACTICE_H
