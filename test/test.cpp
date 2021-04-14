@@ -28,7 +28,7 @@ TEST_CASE("ButtonFsmBehaviour")
     }
 
     SECTION("2") {
-        fsm.state == State::waitForPress; // B: This statement is run after A
+        fsm.state = State::waitForPress; // B: This statement is run after A
 
         SECTION("2.1") {
             // C: This statement is run after A and B
