@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include "../prod/fsm.h"
 #include "fsm.h"
 
 void initButtonFSM(ButtonFsm *fsm) {

@@ -1,7 +1,7 @@
 Instructions
 ------------
 
-1. In test/test.cpp you will find some tests
+1. In test.cpp you will find some tests
    to get you started. Run them first of all,
    verify they're all passing.
 

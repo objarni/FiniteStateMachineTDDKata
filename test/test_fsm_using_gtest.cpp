@@ -1,6 +1,5 @@
 #include <iostream>
 
-//#include <catch2/catch.hpp>
 #include <gtest/gtest.h>
 
 extern "C" {
