@@ -6,18 +6,42 @@ extern "C" {
 #include "../prod/fsm.h"
 }
 
-TEST(ButtonFsm, 1)
+TEST(ButtonFsm, initialState)
 {
     ButtonFsm fsm;
     initButtonFSM(&fsm);
     ASSERT_EQ(fsm.state, State::waitForPress);
 }
 
-TEST(ButtonFsm, 2) {
+TEST(ButtonFsm, userPressesButton) {
     ButtonFsm fsm;
     initButtonFSM(&fsm);
     buttonSignalHandler(&fsm, Signal::USER_PRESS);
     ASSERT_EQ(fsm.state, State::waitForElevator);
+}
+
+TEST(ButtonFsm, elevatorArrive) {
+    ButtonFsm fsm;
+    initButtonFSM(&fsm);
+    fsm.state = State::waitForElevator;
+    buttonSignalHandler(&fsm, Signal::DOORS_OPENING);
+    ASSERT_EQ(fsm.state, State::waitForPress);
+}
+
+TEST(ButtonFsm, pressingButtonWhenWaitingForElevator) {
+    ButtonFsm fsm;
+    initButtonFSM(&fsm);
+    fsm.state = State::waitForElevator;
+    buttonSignalHandler(&fsm, Signal::USER_PRESS);
+    ASSERT_EQ(fsm.state, State::waitForElevator);
+}
+
+TEST(ButtonFsm, elevatorArrivingWhenWaitingForPress) {
+    ButtonFsm fsm;
+    initButtonFSM(&fsm);
+    fsm.state = State::waitForPress;
+    buttonSignalHandler(&fsm, Signal::DOORS_OPENING);
+    ASSERT_EQ(fsm.state, State::waitForPress);
 }
 
 /*

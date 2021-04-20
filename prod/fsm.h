@@ -6,6 +6,7 @@ typedef enum {
 
 typedef enum {
     USER_PRESS,
+    DOORS_OPENING,
 } Signal;
 
 typedef struct {

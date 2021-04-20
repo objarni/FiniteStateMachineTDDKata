@@ -5,5 +5,14 @@ void initButtonFSM(ButtonFsm *fsm) {
 }
 
 void buttonSignalHandler(ButtonFsm *fsm, Signal signal) {
-    fsm->state = waitForElevator;
+    switch (fsm->state) {
+        case waitForPress:
+            if (signal == USER_PRESS)
+                fsm->state = waitForElevator;
+            break;
+        case waitForElevator:
+            if (signal == DOORS_OPENING)
+                fsm->state = waitForPress;
+            break;
+    }
 }
