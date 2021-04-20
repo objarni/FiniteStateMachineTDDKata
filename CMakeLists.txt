@@ -10,7 +10,7 @@ if(USE_GOOGLE_TEST)
     enable_testing()
     find_package(GTest REQUIRED)
     include(GoogleTest)
-    add_executable(fsm_practice_gtest main_gtest.cpp prod/fsm.c test/test_fsm_using_gtest.cpp)
+    add_executable(fsm_practice_gtest main_gtest.cpp prod/fsm.c prod/port.c test/test_fsm_using_gtest.cpp)
     target_link_libraries(fsm_practice_gtest GTest::GTest)
 endif()
 
