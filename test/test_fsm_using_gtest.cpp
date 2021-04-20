@@ -4,17 +4,23 @@
 
 extern "C" {
 #include "../prod/fsm.h"
+#include "../prod/port.h"
 }
+
+unsigned char fakePorts[4] = {0, 0, 0, 0};
 
 TEST(ButtonFsm, initialState)
 {
     ButtonFsm fsm;
+    setPortAddress0(&fakePorts[0]);
     initButtonFSM(&fsm);
+    setPortAddress0(&fakePorts[0]);
     ASSERT_EQ(fsm.state, State::waitForPress);
 }
 
 TEST(ButtonFsm, userPressesButton) {
     ButtonFsm fsm;
+    setPortAddress0(&fakePorts[0]);
     buttonSignalHandler(&fsm, Signal::USER_PRESS);
     ASSERT_EQ(fsm.state, State::waitForElevator);
 }
@@ -22,6 +28,7 @@ TEST(ButtonFsm, userPressesButton) {
 TEST(ButtonFsm, elevatorArrive) {
     ButtonFsm fsm;
     fsm.state = State::waitForElevator;
+    setPortAddress0(&fakePorts[0]);
     buttonSignalHandler(&fsm, Signal::DOORS_OPENING);
     ASSERT_EQ(fsm.state, State::waitForPress);
 }
@@ -29,6 +36,7 @@ TEST(ButtonFsm, elevatorArrive) {
 TEST(ButtonFsm, pressingButtonWhenWaitingForElevator) {
     ButtonFsm fsm;
     fsm.state = State::waitForElevator;
+    setPortAddress0(&fakePorts[0]);
     buttonSignalHandler(&fsm, Signal::USER_PRESS);
     ASSERT_EQ(fsm.state, State::waitForElevator);
 }
@@ -36,19 +44,42 @@ TEST(ButtonFsm, pressingButtonWhenWaitingForElevator) {
 TEST(ButtonFsm, elevatorArrivingWhenWaitingForPress) {
     ButtonFsm fsm;
     fsm.state = State::waitForPress;
+    setPortAddress0(&fakePorts[0]);
     buttonSignalHandler(&fsm, Signal::DOORS_OPENING);
     ASSERT_EQ(fsm.state, State::waitForPress);
 }
 
-#import "../prod/port.h"
-
 TEST(ButtonFsm, lampGoesOnWhenUserPressesButton) {
     ButtonFsm fsm;
     initButtonFSM(&fsm);
-    unsigned char fakePorts[4] = {0, 0, 0, 0};
     setPortAddress0(&fakePorts[0]);
     buttonSignalHandler(&fsm, Signal::USER_PRESS);
-    ASSERT_EQ(1<<7, fakePorts[1]);
+    unsigned char got = int(fakePorts[1]);
+    unsigned char want = 1 << 7;
+    ASSERT_EQ(got, want);
+}
+
+TEST(ButtonFsm, lampGoesOffWhenUserPressesButton) {
+    ButtonFsm fsm;
+    initButtonFSM(&fsm);
+    fsm.state = State::waitForElevator;
+    fakePorts[1] = 255; // Set all bits
+    setPortAddress0(&fakePorts[0]);
+    buttonSignalHandler(&fsm, Signal::DOORS_OPENING);
+    unsigned char got = int(fakePorts[1]);
+    unsigned char want = 0b01111111; // Expect bit to have been cleared
+    ASSERT_EQ(got, want);
+}
+
+TEST(ButtonFsm, doesNotTouchOtherBitsOnLampOn) {
+    ButtonFsm fsm;
+    initButtonFSM(&fsm);
+    setPortAddress0(&fakePorts[0]);
+    fakePorts[1] = 0b11111111;
+    buttonSignalHandler(&fsm, Signal::USER_PRESS);
+    unsigned char got = int(fakePorts[1]);
+    unsigned char want = 0b11111111;
+    ASSERT_EQ(got, want);
 }
 
 /*
