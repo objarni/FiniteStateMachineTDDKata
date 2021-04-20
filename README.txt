@@ -5,11 +5,12 @@ Instructions
    to get you started. Run them first of all,
    verify they're all passing.
 
-2. Give the tests better names!
+2. Add tests for the following scenarios:
 
-3. Below the tests you will find a
-   test list partially crossed off.
-   Continue implementing the Button FSM.
+ - lamp should turn on when the user presses button
+ - lamp should turn off when the doors open
+ - port1 should not have any other bit than 7
+   modified by the button FSM (several tests possibly)
 
 Happy coding :)
 
