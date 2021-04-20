@@ -5,7 +5,11 @@ Instructions
    to get you started. Run them first of all,
    verify they're all passing.
 
-2. Add tests for the following scenarios:
+2. Have a look at relevant files to get you started:
+    port.h|c    - communicate with port through memory
+    fsm.h|c     - the (not finished) Button FSM implementation
+
+3. Ready to write some tests? Here's some scenarios:
 
  - lamp should turn on when the user presses button
  - lamp should turn off when the doors open
