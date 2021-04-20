@@ -10,7 +10,7 @@ void buttonSignalHandler(ButtonFsm *fsm, Signal signal) {
     switch (fsm->state) {
         case waitForPress:
             if (signal == USER_PRESS) {
-                *port1 &= 1 << 7;
+                *port1 |= 1 << 7;
                 fsm->state = waitForElevator;
             }
             break;
