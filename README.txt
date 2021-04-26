@@ -17,13 +17,3 @@ Instructions
    modified by the button FSM (several tests possibly)
 
 Happy coding :)
-
-IMPROVEMENT IDEAS
------------------
-- bugs in jamboard
-- 0 based bit counting
-- port0, port1 etc global pointers instead of set/get array API
-   OR
-- test list above tests, so array structure more clear
-- context of ports, e.g. controlling elevator machine, doors etc.
-
