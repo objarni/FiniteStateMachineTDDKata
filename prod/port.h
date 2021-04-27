@@ -1,19 +1,9 @@
 #pragma once
 
-// *** Use this in your production code ***
-// Get memory mapped port adress.
-// The returned pointer can be used for both
-// reading and writing to the port.
-unsigned char* getPortAddress(int portNumber);
+// GLOBAL VARIABLES POINTING TO PORT MEMORY ADDRESSES
+// Override these in tests to test Button FSM
 
-// *** Use this in your tests ***
-// Function to modify the memory mapped address
-// of the ports.
-// The ports are mapped in-order, and calling
-// this function specifies the memory offset
-// of port 0.
-//
-// 0, 1, 2, ...
-// ^
-//
-void setPortAddress0(unsigned char* address);
+extern unsigned char* port0Address;
+extern unsigned char* port1Address;
+extern unsigned char* port2Address;
+extern unsigned char* port3Address;
