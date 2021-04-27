@@ -7,10 +7,7 @@ extern "C" {
 #include "../prod/port.h"
 }
 
-unsigned char fakePorts[4] = {0, 0, 0, 0};
-
-/* Test list 2
- * LAMP CONTROL
+/* Test list 2 - LAMP CONTROL
  * [ ] when going to waitForElevator state, the lamp is
  *     turned on. The lamp is turned on by setting bit 7 of port 1
  * [ ] when going to waitForPress state, the lamp is
@@ -20,43 +17,61 @@ unsigned char fakePorts[4] = {0, 0, 0, 0};
  */
 
 
-TEST(ButtonFsm, initialState)
+// Test byte used for verification
+unsigned char port1value = 0;
+
+TEST(ButtonFsm, lampTurnsOn)
 {
+    // Arrange
+    port1Address = &port1value;
     ButtonFsm fsm;
-    setPortAddress0(&fakePorts[0]);
     initButtonFSM(&fsm);
-    setPortAddress0(&fakePorts[0]);
+
+    // Act
+    buttonSignalHandler(&fsm, Signal::USER_PRESS);
+
+    // Assert
+    ASSERT_EQ(port1value, 1<<7);
+}
+
+/** Above: tests for lamp control **/
+/** Below: tests for state transitions **/
+
+TEST(ButtonFsm, initialState) {
+    port1Address = &port1value;
+    ButtonFsm fsm;
+    initButtonFSM(&fsm);
     ASSERT_EQ(fsm.state, State::waitForPress);
 }
 
 TEST(ButtonFsm, userPressesButton) {
+    port1Address = &port1value;
     ButtonFsm fsm;
     initButtonFSM(&fsm);
-    setPortAddress0(&fakePorts[0]);
     buttonSignalHandler(&fsm, Signal::USER_PRESS);
     ASSERT_EQ(fsm.state, State::waitForElevator);
 }
 
 TEST(ButtonFsm, elevatorArrive) {
+    port1Address = &port1value;
     ButtonFsm fsm;
     fsm.state = State::waitForElevator;
-    setPortAddress0(&fakePorts[0]);
     buttonSignalHandler(&fsm, Signal::DOORS_OPENING);
     ASSERT_EQ(fsm.state, State::waitForPress);
 }
 
 TEST(ButtonFsm, pressingButtonWhenWaitingForElevator) {
+    port1Address = &port1value;
     ButtonFsm fsm;
     fsm.state = State::waitForElevator;
-    setPortAddress0(&fakePorts[0]);
     buttonSignalHandler(&fsm, Signal::USER_PRESS);
     ASSERT_EQ(fsm.state, State::waitForElevator);
 }
 
 TEST(ButtonFsm, elevatorArrivingWhenWaitingForPress) {
+    port1Address = &port1value;
     ButtonFsm fsm;
     fsm.state = State::waitForPress;
-    setPortAddress0(&fakePorts[0]);
     buttonSignalHandler(&fsm, Signal::DOORS_OPENING);
     ASSERT_EQ(fsm.state, State::waitForPress);
 }
