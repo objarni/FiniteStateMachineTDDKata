@@ -22,16 +22,7 @@ unsigned char port1value = 0;
 
 TEST(ButtonFsm, lampTurnsOn)
 {
-    // Arrange
-    port1Address = &port1value;
-    ButtonFsm fsm;
-    initButtonFSM(&fsm);
-
-    // Act
-    buttonSignalHandler(&fsm, Signal::USER_PRESS);
-
-    // Assert
-    ASSERT_EQ(port1value, 1<<7);
+    // TODO
 }
 
 /** Above: tests for lamp control **/
