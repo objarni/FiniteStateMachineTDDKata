@@ -1,10 +1,21 @@
-//
-// Created by ubuntu on 2021-03-03.
-//
+#pragma once
 
-#ifndef FSM_PRACTICE_H
-#define FSM_PRACTICE_H
+typedef enum {
+    waitForPress, waitForElevator
+} State;
 
-int fn(int i);
+typedef enum {
+    USER_PRESS,
+    DOORS_OPENING,
+} Signal;
 
-#endif //FSM_PRACTICE_H
+typedef struct {
+    State state;
+} ButtonFsm;
+
+void initButtonFSM(ButtonFsm* fsm);
+
+void buttonSignalHandler(
+    ButtonFsm *fsm,
+    Signal signal
+);
